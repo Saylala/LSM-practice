@@ -1,7 +1,8 @@
+using System.IO;
 using DataLayer.OperationLog.Operations;
 using DataLayer.Utilities;
 
-namespace DataLayer
+namespace DataLayer.OperationLog
 {
     public class OpLogManager : IOpLogReader, IOpLogWriter
     {
@@ -16,12 +17,21 @@ namespace DataLayer
 
         public bool Read(out IOperation operation)
         {
-            throw new System.NotImplementedException();
+            using (var file = olFile.GetStream())
+            {
+                operation = serializer.Deserialize(file);
+            }
+            return operation != null;
         }
 
         public void Write(IOperation operation)
         {
-            throw new System.NotImplementedException();
+            var data = serializer.Serialize(operation);
+            using (var file = olFile.GetStream())
+            {
+                file.Seek(file.Length, SeekOrigin.Current);
+                file.Write(data, 0, data.Length);
+            }
         }
     }
 }

@@ -1,4 +1,6 @@
 using DataLayer.MemoryCopy;
+using DataLayer.OperationLog;
+using DataLayer.OperationLog.Operations;
 
 namespace DataLayer.Warmup
 {
@@ -13,7 +15,11 @@ namespace DataLayer.Warmup
 
         public void Apply(IMemTable memTable)
         {
-            throw new System.NotImplementedException();
+            IOperation operation;
+            while (opLogReader.Read(out operation))
+            {
+                memTable.Apply(operation.Item);
+            }
         }
     }
 }

@@ -12,6 +12,10 @@
             return new Item(key, null, true);
         }
 
+        public Item()
+        {
+        }
+
         private Item(string key, string value, bool isTombstone)
         {
             Key = key;
@@ -19,26 +23,27 @@
             IsTombStone = isTombstone;
         }
 
-        public string Key { get; }
+        public string Key { get; set; }
 
-        public string Value { get; }
+        public string Value { get; set; }
 
-        public bool IsTombStone { get; }
+        public bool IsTombStone { get; set; }
 
         #region EqualityMembers
+
         private bool Equals(Item other)
         {
             return string.Equals(Key, other.Key)
-                && string.Equals(Value, other.Value)
-                && IsTombStone == other.IsTombStone;
+                   && string.Equals(Value, other.Value)
+                   && IsTombStone == other.IsTombStone;
         }
 
         public override bool Equals(object obj)
         {
             if (ReferenceEquals(null, obj)) return false;
             if (ReferenceEquals(this, obj)) return true;
-            if (obj.GetType() != this.GetType()) return false;
-            return Equals((Item)obj);
+            if (obj.GetType() != GetType()) return false;
+            return Equals((Item) obj);
         }
 
         public override int GetHashCode()
@@ -51,6 +56,7 @@
                 return hashCode;
             }
         }
+
         #endregion
     }
 }
